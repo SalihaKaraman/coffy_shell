@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:coffy_shell/firebase_options.dart';
 import 'package:coffy_shell/app.dart';
 import 'package:coffy_shell/services/firebase_service.dart';
@@ -8,13 +9,14 @@ import 'package:coffy_shell/providers/cart_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Google Fonts yapılandırması - HTTP çekmeyi aktif tut ama takılmayı önlemeye çalış
+  GoogleFonts.config.allowRuntimeFetching = true;
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   
-  // Seed dummy data if needed
-  await FirebaseService().populateDummyData();
-
   runApp(
     MultiProvider(
       providers: [
@@ -23,6 +25,9 @@ void main() async {
       child: const App(),
     ),
   );
+
+  // Seed dummy data in background
+  FirebaseService().populateDummyData();
 }
 
 
