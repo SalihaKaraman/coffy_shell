@@ -93,6 +93,14 @@ class CartScreen extends StatelessWidget {
                                 color: AppColors.earthyBrown,
                                 onPressed: () {
                                   cart.updateQuantity(item.product.id, -1);
+                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('${item.product.name} sepetten çıkarıldı!'),
+                                      duration: const Duration(seconds: 2),
+                                      backgroundColor: AppColors.earthyBrown,
+                                    ),
+                                  );
                                 },
                               ),
                               Text(item.quantity.toString(), style: Theme.of(context).textTheme.bodyLarge),

@@ -32,9 +32,9 @@ class _MenuScreenState extends State<MenuScreen> {
         elevation: 0,
         title: Text(
           'Menü',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: AppColors.primary,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(color: AppColors.primary),
         ),
         actions: [
           IconButton(
@@ -42,7 +42,9 @@ class _MenuScreenState extends State<MenuScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoyaltyCardScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const LoyaltyCardScreen(),
+                ),
               );
             },
           ),
@@ -53,11 +55,16 @@ class _MenuScreenState extends State<MenuScreen> {
                 isLabelVisible: cart.totalItems > 0,
                 backgroundColor: AppColors.terracotta,
                 child: IconButton(
-                  icon: const Icon(Icons.shopping_bag_outlined, color: AppColors.earthyBrown),
+                  icon: const Icon(
+                    Icons.shopping_bag_outlined,
+                    color: AppColors.earthyBrown,
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const CartScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => const CartScreen(),
+                      ),
                     );
                   },
                 ),
@@ -70,16 +77,20 @@ class _MenuScreenState extends State<MenuScreen> {
         stream: _firebaseService.getProducts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.terracotta));
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.terracotta),
+            );
           }
           if (snapshot.hasError) {
             return Center(child: Text('Hata: ${snapshot.error}'));
           }
-          
+
           final allProducts = snapshot.data ?? [];
           final filteredProducts = selectedCategory == 'Tümü'
               ? allProducts
-              : allProducts.where((p) => p.category == selectedCategory).toList();
+              : allProducts
+                    .where((p) => p.category == selectedCategory)
+                    .toList();
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +100,10 @@ class _MenuScreenState extends State<MenuScreen> {
                 height: 60,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   itemCount: categories.length,
                   itemBuilder: (context, index) {
                     return Padding(
@@ -107,63 +121,72 @@ class _MenuScreenState extends State<MenuScreen> {
                   },
                 ),
               ),
-              
+
               // Product Grid
               Expanded(
-                child: filteredProducts.isEmpty 
-                  ? const Center(child: Text('Bu kategoride ürün bulunamadı.'))
-                  : GridView.builder(
-                      padding: const EdgeInsets.all(16),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.75,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
+                child: filteredProducts.isEmpty
+                    ? const Center(
+                        child: Text('Bu kategoride ürün bulunamadı.'),
+                      )
+                    : GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                            ),
+                        itemCount: filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          return ProductCard(
+                            product: filteredProducts[index],
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailScreen(
+                                    product: filteredProducts[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            onAdd: () {
+                              context.read<CartProvider>().addToCart(
+                                filteredProducts[index],
+                              );
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${filteredProducts[index].name} sepete eklendi!',
+                                  ),
+                                  duration: const Duration(seconds: 1),
+                                  backgroundColor: AppColors.terracotta,
+                                  action: SnackBarAction(
+                                    label: 'Sepete Git',
+                                    textColor: Colors.white,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CartScreen(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                      itemCount: filteredProducts.length,
-                      itemBuilder: (context, index) {
-                        return ProductCard(
-                          product: filteredProducts[index],
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProductDetailScreen(
-                                  product: filteredProducts[index],
-                                ),
-                              ),
-                            );
-                          },
-                          onAdd: () {
-                            context.read<CartProvider>().addToCart(filteredProducts[index]);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('${filteredProducts[index].name} sepete eklendi!'),
-                                duration: const Duration(seconds: 2),
-                                backgroundColor: AppColors.terracotta,
-                                action: SnackBarAction(
-                                  label: 'Sepete Git',
-                                  textColor: Colors.white,
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const CartScreen()),
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
               ),
             ],
           );
-        }
+        },
       ),
     );
   }
 }
-
-
