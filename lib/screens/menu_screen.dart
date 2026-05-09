@@ -155,14 +155,19 @@ class _MenuScreenState extends State<MenuScreen> {
                               context.read<CartProvider>().addToCart(
                                 filteredProducts[index],
                               );
-                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              final scaffoldMessenger = ScaffoldMessenger.of(context);
+                              scaffoldMessenger.removeCurrentSnackBar();
+                              scaffoldMessenger.showSnackBar(
                                 SnackBar(
                                   content: Text(
                                     '${filteredProducts[index].name} sepete eklendi!',
                                   ),
-                                  duration: const Duration(seconds: 1),
+                                  duration: const Duration(seconds: 2),
                                   backgroundColor: AppColors.terracotta,
+                                  behavior: SnackBarBehavior.floating,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
                                   action: SnackBarAction(
                                     label: 'Sepete Git',
                                     textColor: Colors.white,

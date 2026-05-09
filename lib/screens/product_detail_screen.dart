@@ -126,12 +126,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     onPressed: () {
                       context.read<CartProvider>().addToCart(widget.product, quantity: quantity);
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      final scaffoldMessenger = ScaffoldMessenger.of(context);
+                      scaffoldMessenger.removeCurrentSnackBar();
+                      scaffoldMessenger.showSnackBar(
                         SnackBar(
                           content: Text('${widget.product.name} sepete eklendi!'),
                           duration: const Duration(seconds: 2),
                           backgroundColor: AppColors.terracotta,
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           action: SnackBarAction(
                             label: 'Sepete Git',
                             textColor: Colors.white,
