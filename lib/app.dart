@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:coffy_shell/home_screen.dart';
+import 'package:coffy_shell/screens/welcome_screen.dart';
+import 'package:coffy_shell/theme/app_theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -7,9 +8,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Campus Coffee',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: const HomeScreen(),
+      title: 'Artisanal Cafe',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      home: const WelcomeScreen(),
     );
   }
 }
+
