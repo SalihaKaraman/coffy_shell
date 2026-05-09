@@ -9,6 +9,8 @@ import 'package:coffy_shell/screens/cart_screen.dart';
 import 'package:coffy_shell/screens/loyalty_card_screen.dart';
 import 'package:coffy_shell/providers/cart_provider.dart';
 
+import 'package:coffy_shell/services/firebase_service.dart';
+
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
 
@@ -19,40 +21,10 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   String selectedCategory = 'Tümü';
   final List<String> categories = ['Tümü', 'Kahve', 'Tatlı', 'Çay', 'Soğuk'];
-
-  final List<Product> dummyProducts = [
-    Product(
-      id: '1',
-      name: 'Artisanal Latte',
-      description: 'Özel kavrulmuş çekirdekler ve ipeksi süt köpüğü.',
-      price: 65.0,
-      imageUrl: '',
-      category: 'Kahve',
-    ),
-    Product(
-      id: '2',
-      name: 'V60 Pour Over',
-      description: 'Taze demlenmiş, meyvemsi notalara sahip filtre kahve.',
-      price: 55.0,
-      imageUrl: '',
-      category: 'Kahve',
-    ),
-    Product(
-      id: '3',
-      name: 'Limonlu Cheesecake',
-      description: 'Günlük taze, yoğun limon aromalı enfes tatlı.',
-      price: 85.0,
-      imageUrl: '',
-      category: 'Tatlı',
-    ),
-  ];
+  final FirebaseService _firebaseService = FirebaseService();
 
   @override
   Widget build(BuildContext context) {
-    List<Product> filteredProducts = selectedCategory == 'Tümü'
-        ? dummyProducts
-        : dummyProducts.where((p) => p.category == selectedCategory).toList();
-
     return Scaffold(
       backgroundColor: AppColors.cream,
       appBar: AppBar(
@@ -94,84 +66,104 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Categories
-          SizedBox(
-            height: 60,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: CategoryChip(
-                    label: categories[index],
-                    isSelected: selectedCategory == categories[index],
-                    onTap: () {
-                      setState(() {
-                        selectedCategory = categories[index];
-                      });
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
+      body: StreamBuilder<List<Product>>(
+        stream: _firebaseService.getProducts(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(color: AppColors.terracotta));
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Hata: ${snapshot.error}'));
+          }
           
-          // Product Grid
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: filteredProducts.length,
-              itemBuilder: (context, index) {
-                return ProductCard(
-                  product: filteredProducts[index],
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetailScreen(
-                          product: filteredProducts[index],
-                        ),
+          final allProducts = snapshot.data ?? [];
+          final filteredProducts = selectedCategory == 'Tümü'
+              ? allProducts
+              : allProducts.where((p) => p.category == selectedCategory).toList();
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Categories
+              SizedBox(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CategoryChip(
+                        label: categories[index],
+                        isSelected: selectedCategory == categories[index],
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = categories[index];
+                          });
+                        },
                       ),
                     );
                   },
-                  onAdd: () {
-                    context.read<CartProvider>().addToCart(filteredProducts[index]);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('${filteredProducts[index].name} sepete eklendi!'),
-                        duration: const Duration(seconds: 2),
-                        backgroundColor: AppColors.terracotta,
-                        action: SnackBarAction(
-                          label: 'Sepete Git',
-                          textColor: Colors.white,
-                          onPressed: () {
+                ),
+              ),
+              
+              // Product Grid
+              Expanded(
+                child: filteredProducts.isEmpty 
+                  ? const Center(child: Text('Bu kategoride ürün bulunamadı.'))
+                  : GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        return ProductCard(
+                          product: filteredProducts[index],
+                          onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const CartScreen()),
+                              MaterialPageRoute(
+                                builder: (context) => ProductDetailScreen(
+                                  product: filteredProducts[index],
+                                ),
+                              ),
                             );
                           },
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
+                          onAdd: () {
+                            context.read<CartProvider>().addToCart(filteredProducts[index]);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('${filteredProducts[index].name} sepete eklendi!'),
+                                duration: const Duration(seconds: 2),
+                                backgroundColor: AppColors.terracotta,
+                                action: SnackBarAction(
+                                  label: 'Sepete Git',
+                                  textColor: Colors.white,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const CartScreen()),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+              ),
+            ],
+          );
+        }
       ),
     );
   }
 }
+
 
