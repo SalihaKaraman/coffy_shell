@@ -26,7 +26,7 @@ class FirebaseService {
         final List<Product> dummyProducts = [
           // ... (existing dummy products)
           Product(id: '', name: 'Artisanal Latte', description: 'Özel kavrulmuş çekirdekler ve ipeksi süt köpüğü.', price: 65.0, imageUrl: 'https://images.unsplash.com/photo-1541167760496-162955ed8a9f?w=500', category: 'Kahve'),
-          Product(id: '', name: 'V60 Pour Over', description: 'Taze demlenmiş, meyvemsi notalara sahip filtre kahve.', price: 55.0, imageUrl: 'https://images.unsplash.com/photo-1544787210-282aa748283b?w=500', category: 'Kahve'),
+          Product(id: '', name: 'V60 Pour Over', description: 'Taze demlenmiş, meyvemsi notalara sahip filtre kahve.', price: 55.0, imageUrl: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500', category: 'Kahve'),
           Product(id: '', name: 'Cortado', description: 'Eşit miktarda espresso ve süt ile yoğun kıvam.', price: 60.0, imageUrl: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=500', category: 'Kahve'),
           Product(id: '', name: 'Flat White', description: 'Yoğun espresso ve mikro köpüklü sütün uyumu.', price: 70.0, imageUrl: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=500', category: 'Kahve'),
           Product(id: '', name: 'Limonlu Cheesecake', description: 'Günlük taze, yoğun limon aromalı enfes tatlı.', price: 85.0, imageUrl: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=500', category: 'Tatlı'),
