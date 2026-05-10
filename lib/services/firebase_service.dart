@@ -35,7 +35,8 @@ class FirebaseService {
           Product(id: '', name: 'Matcha Latte', description: 'Japonya\'dan gelen premium matcha ve süt.', price: 80.0, imageUrl: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=500', category: 'Çay'),
           Product(id: '', name: 'Hibiscus Tea', description: 'C vitamini deposu, ferahlatıcı kırmızı çay.', price: 50.0, imageUrl: 'https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?w=500', category: 'Çay'),
           Product(id: '', name: 'Cold Brew', description: '12 saat soğuk demlenmiş, düşük asiditeli kahve.', price: 75.0, imageUrl: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=500', category: 'Soğuk'),
-          Product(id: '', name: 'Çilekli Limonata', description: 'Ev yapımı taze limonata ve gerçek çilekler.', price: 65.0, imageUrl: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500', category: 'Soğuk'),
+          Product(id: '', name: 'Double Espresso', description: 'Güne başlamak için saf ve yoğun kafein gücü.', price: 50.0, imageUrl: 'https://images.unsplash.com/photo-1510707577719-af5c1aa550df?w=500', category: 'Kahve'),
+          Product(id: '', name: 'Iced Americano', description: 'Serinletici ve sert, taze demlenmiş espresso.', price: 65.0, imageUrl: 'https://images.unsplash.com/photo-1551046710-23b0d2c2869b?w=500', category: 'Soğuk'),
         ];
 
         final addBatch = _firestore.batch();

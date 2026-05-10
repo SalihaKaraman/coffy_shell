@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#574333",
+                    "tertiary": "#172a0e",
+                    "surface-bright": "#fff8f5",
+                    "background": "#fff8f5",
+                    "on-secondary-fixed": "#360f00",
+                    "inverse-on-surface": "#f6efec",
+                    "secondary-fixed": "#ffdbcd",
+                    "on-error": "#ffffff",
+                    "secondary": "#954824",
+                    "on-surface-variant": "#4e453e",
+                    "primary-fixed": "#fbddc7",
+                    "secondary-fixed-dim": "#ffb596",
+                    "surface-variant": "#e8e1de",
+                    "on-error-container": "#93000a",
+                    "on-surface": "#1e1b1a",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#33302e",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e8e1de",
+                    "on-primary-container": "#bba08c",
+                    "secondary-container": "#fd9a6f",
+                    "surface-container-high": "#eee7e4",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#384c2d",
+                    "surface": "#fff8f5",
+                    "primary-fixed-dim": "#dec1ac",
+                    "surface-container-low": "#f9f2ef",
+                    "outline": "#80756d",
+                    "on-secondary-fixed-variant": "#77320e",
+                    "tertiary-fixed-dim": "#b6cea5",
+                    "primary-container": "#4a3728",
+                    "on-tertiary-container": "#95ac85",
+                    "on-secondary-container": "#75300d",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f3ecea",
+                    "on-primary-fixed": "#28180b",
+                    "tertiary-fixed": "#d2eac0",
+                    "inverse-primary": "#dec1ac",
+                    "surface-dim": "#dfd9d6",
+                    "primary": "#322214",
+                    "surface-tint": "#705a49",
+                    "on-tertiary-fixed": "#0e2006",
+                    "tertiary-container": "#2d4022",
+                    "outline-variant": "#d2c4bb",
+                    "on-primary": "#ffffff",
+                    "on-background": "#1e1b1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "sm": "8px",
+                    "base": "4px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "gutter": "16px",
+                    "container-margin": "20px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "headline-xl": ["Playfair Display"],
+                    "label-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-md": ["22px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "headline-lg": ["28px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-xl": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: minmax(140px, auto);
+            gap: 16px;
+        }
+        .organic-bg {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.25;
+            pointer-events: none;
+        }
+        .coffee-ring {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 1px solid rgba(74, 55, 40, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .glass-nav {
+            background: rgba(255, 248, 245, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed relative overflow-x-hidden">
+<!-- Decorative Ornaments -->
+<div class="organic-bg top-0 left-0 w-full h-full">
+<svg class="absolute top-[10%] right-[-5%] w-64 h-64 text-primary-fixed/30" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87.1,-15.7,85.6,-0.9C84,13.9,77.5,27.8,69.2,40.1C60.9,52.4,50.8,63,38.6,70.9C26.4,78.8,13.2,84,-0.8,85.4C-14.8,86.8,-29.6,84.4,-42.2,77.2C-54.8,70.1,-65.2,58.3,-72.8,44.9C-80.4,31.6,-85.2,16.8,-85.5,1.9C-85.8,-13.1,-81.6,-28.1,-73.4,-40.7C-65.2,-53.4,-53.1,-63.7,-39.8,-71C-26.5,-78.3,-13.2,-82.6,0.7,-83.9C14.7,-85.2,29.4,-83.5,44.7,-76.4Z" fill="currentColor" transform="translate(100 100)"></path>
+</svg>
+<div class="coffee-ring top-[40%] left-[-20px]"></div>
+<div class="coffee-ring bottom-[15%] right-[-40px]"></div>
+</div>
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-container-margin h-16 glass-nav border-b border-surface-container">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary active:scale-95 duration-200 cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-headline-lg text-headline-md text-primary tracking-tight">L'Artisan</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<div class="w-9 h-9 rounded-full bg-surface-container-high overflow-hidden border border-primary-fixed-dim">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXpJU7g5MNVrI6rytP5joT1XtdZnduHLkxUfrTSkkYvrTQlPmCuHE144vL-kni69A7NbHvo6_TGhGJwBVdC6QHBPe1aaI8EHBE-8_Cv7tONWOowt-pGPjKBnSHjHLq-aYE7yKv7b_mvxvLo2LmAXBmCJctJT0clp9p5NzNvzemsbFL75uTE9I17h3zg7hNf15PUjvNJIZEBvEV9iw1wvu_1sxU7n_I7rqohFiPHZbd92PTmXiXPDhvXzs6FBcPF6gkMhu9r4E5jnY"/>
+</div>
+</div>
+</header>
+<main class="pt-16 pb-28">
+<!-- Immersive Hero Section: Barista's Choice -->
+<section class="px-container-margin mt-lg mb-xl">
+<div class="relative h-[400px] rounded-[2.5rem] overflow-hidden shadow-2xl group">
+<img alt="Specialty Coffee" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW1orf4YgdyPAYho8gUaYcUmbz81Pzy6Nrj-GIzhngxrRAQtV0mLAASFWnGFjy3Ag5pqqB_Z1cPyzqvgy5BO4UXEz4iXgI-C0cYHbhDyURzhYZFd_ZdPObpqjgLXuPaJgRsd_DMIorIgXlqQuwn1kceJ0IXHuY8GjKjc0IcISN3Z6Mn6WBLH03kelniIRJf7Lyjvhh6POblw2pI6wxzTL2Q69zFVostUBio53gDB-scLUUa1h8-IUSbXV5QAcp5tc7TLlHocri5uE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent"></div>
+<div class="absolute top-6 left-6">
+<span class="bg-secondary/20 backdrop-blur-md text-secondary-fixed-dim text-[10px] px-3 py-1 rounded-full font-label-lg uppercase tracking-[0.2em] border border-secondary/30">Günün Seçkisi</span>
+</div>
+<div class="absolute bottom-8 left-8 right-8">
+<h2 class="font-headline-xl text-white text-[32px] leading-tight mb-2">Artisan Flat White</h2>
+<p class="text-surface-variant font-body-md italic mb-6">"Kavrulmuş fındık notaları ve kadifemsi süt dokusuyla..."</p>
+<div class="flex items-center justify-between">
+<span class="font-headline-lg text-secondary-fixed text-2xl">₺85</span>
+<button class="bg-secondary text-white px-6 py-3 rounded-full font-label-lg flex items-center gap-2 active:scale-95 transition-all shadow-lg">
+                            Sepete Ekle
+                            <span class="material-symbols-outlined !text-[18px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Floating Glassmorphism Categories -->
+<section class="sticky top-[72px] z-40 mb-lg">
+<div class="px-container-margin">
+<div class="glass-nav rounded-2xl p-2 flex gap-4 overflow-x-auto hide-scrollbar shadow-lg border border-white/20">
+<button class="flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-xl whitespace-nowrap shadow-md">
+<span class="material-symbols-outlined !text-[20px]" style="font-variation-settings: 'FILL' 1">coffee</span>
+<span class="font-label-lg">Kahveler</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant px-6 py-3 rounded-xl whitespace-nowrap hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined !text-[20px]">cake</span>
+<span class="font-label-lg">Tatlılar</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant px-6 py-3 rounded-xl whitespace-nowrap hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined !text-[20px]">bakery_dining</span>
+<span class="font-label-lg">Fırından</span>
+</button>
+<button class="flex items-center gap-2 text-on-surface-variant px-6 py-3 rounded-xl whitespace-nowrap hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined !text-[20px]">icecream</span>
+<span class="font-label-lg">Soğuklar</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Creative Broken Grid Layout -->
+<div class="px-container-margin masonry-grid">
+<!-- Large Card: Croissant -->
+<div class="col-span-1 row-span-2 bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-xl border border-surface-container flex flex-col group">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_gKrig0th3eaI-xHm_c-uGAyh1NnQ3pfFa1gzsHtGK_XyVtLr2UD3VTq2deCUOD3pLFfu3roDWqALjMYMlWr5Fp7LmclLzw2BzTdJYk-O_dsztD-Z6_SFYviVqklydsIeij9a58PhFu2vpwQeqDK405KTpxvzoJwidXTvEuwjt9rHaj9A99gve0701U-GyyvESWRgdpZD878oQm0CweQKfE8x2v0n7RnjNKS5CaypXgDV3ndDXS5CKFrN2i7xajFmefByYJK8CQc"/>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed text-[9px] px-2 py-0.5 rounded-full font-label-lg uppercase tracking-widest">Gevrek</span>
+</div>
+</div>
+<div class="p-5 flex-1 flex flex-col">
+<h3 class="font-headline-md text-primary text-xl mb-1">Tereyağlı Kuruvasan</h3>
+<p class="text-on-surface-variant text-[13px] italic leading-relaxed mb-4">Kat kat lezzet, gerçek Fransız tereyağı ile.</p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline-lg text-secondary text-xl">₺70</span>
+<button class="w-10 h-10 rounded-full bg-primary-container text-primary flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined !text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Small Card: Espresso -->
+<div class="col-span-1 bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-lg border border-surface-container flex flex-col group">
+<div class="h-28 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUhfFml4OqV3qhtrjuBrHejGfX69rtGppOTzVt6Yq2jUYiufw2H0Rogy-NzjOCRHrZaTrV6WiNE7D377Xjm_OliFfZ2AKcMko77o_Tmi9LE_xJktwi9zZk3EIXjXmIj0Gn4Fu8U7qZtSzjn0A6CsZAs8qVay2UlJoVMWkKJ-8BtfmiV2kPkIXmvcV2pH8zUDmtxosP0nOeIZpe2QPP45xBc8lJb4FNlsGhTpfeeSfhIUPnGDnFmQeeD8JjDjIMwb-IDPPIuxDPEMM"/>
+</div>
+<div class="p-4 flex-1">
+<h3 class="font-headline-md text-primary text-lg leading-tight">Espresso</h3>
+<p class="text-on-surface-variant text-[11px] font-medium opacity-70">Yoğun &amp; Aromatik</p>
+<div class="flex justify-between items-center mt-3">
+<span class="font-headline-lg text-secondary text-lg">₺65</span>
+<button class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center active:scale-90">
+<span class="material-symbols-outlined !text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Small Card: Iced Latte -->
+<div class="col-span-1 bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-lg border border-surface-container flex flex-col group">
+<div class="h-28 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7mxIdVI_j8huQU8luQqEfQSgcGRuo49yR9ifKt5JR2VxpZQTh6KxMs-vcJyvNmJ2dSiOtaGsgY9vgMD1hVSkdQpCsphfR_0DJ2TQjc9LBakMzEHPwy6Y94B8pYSWdM3aw2kw0j39fZFe5V6cESEWOcBeioSDrd7SEOZNomfWOOCxveIppPDoPgJksoFGhrXjEsLnGekG4j9dbWj_NfkFd_9iJEhd0c8z3S1pAVlyow4t2fc00N2Cl1Nz10bp9M_hD9t4CDiOvI6A"/>
+</div>
+<div class="p-4 flex-1">
+<h3 class="font-headline-md text-primary text-lg leading-tight">Iced Latte</h3>
+<p class="text-on-surface-variant text-[11px] font-medium opacity-70">Serinletici &amp; Yumuşak</p>
+<div class="flex justify-between items-center mt-3">
+<span class="font-headline-lg text-secondary text-lg">₺95</span>
+<button class="w-8 h-8 rounded-full bg-secondary text-white flex items-center justify-center active:scale-90">
+<span class="material-symbols-outlined !text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Medium Card: Chocolate Cake -->
+<div class="col-span-1 bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-lg border border-surface-container flex flex-col group">
+<div class="h-36 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjMbZXDDaV_PXrLjfT4kO0dEpDHZrkg0W-iunAAnm6qR_UBlLHAKXsfvPf3jhvjMUMQHK7ba7IGpw-9ix8zRTGwWb29ydCBDfqfVtd8-3vrzaq6E-mQWSGiaSxiW5YfXTwLpUHciQ-se0wEY8ESDQkQJ0JLylVPkzc_jLqBSg-kMfzqA2ZP6gvMY0wHbbW2WuEv6jiYV8i4_qvORoo--dflXEFbRWIK3Rykqap5jMb-VpwICCb_lpJQYXyHyvOhZ-LnUL4OgEE_Ms"/>
+</div>
+<div class="p-4 flex-1">
+<h3 class="font-headline-md text-primary text-lg leading-tight">Belçika Çikolatalı</h3>
+<p class="text-on-surface-variant text-[11px] italic mb-3">Zengin doku, bitter haz.</p>
+<div class="flex justify-between items-center">
+<span class="font-headline-lg text-secondary text-lg">₺110</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center active:scale-90">
+<span class="material-symbols-outlined !text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Medium Card: Fruit Bowl -->
+<div class="col-span-1 bg-surface-container-lowest rounded-[2rem] overflow-hidden shadow-lg border border-surface-container flex flex-col group">
+<div class="h-36 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI4ssPkH458hwEZsFM2WSAWR2emvtEiElh4q3pa3WHaF-gJjU_GR5Tg2Y0f3vn4XZ1XQn_LLHxN_QGZb6vMJyhLsN_dLMi3I2_R0KxDRKW6Rrv-j4R_qHN5v3gIj_uau5SKj10oNX2E8ib3JiyZhIrpxUJ5Ry3ku66uWiDGcu3Oxfbt8eCDAG4hsTAMJ1m1ddRDW-K7j1mpvqBXiG3Nm52mg2LDO8ma67zLWnvSJdNevdUEnzBcPEHjairX1w27FvwOO0TchNzeDY"/>
+</div>
+<div class="p-4 flex-1">
+<h3 class="font-headline-md text-primary text-lg leading-tight">Orman Meyveli</h3>
+<p class="text-on-surface-variant text-[11px] italic mb-3">Taze, canlı &amp; sağlıklı.</p>
+<div class="flex justify-between items-center">
+<span class="font-headline-lg text-secondary text-lg">₺120</span>
+<button class="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center active:scale-90">
+<span class="material-symbols-outlined !text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface/90 dark:bg-surface-container-highest/90 backdrop-blur-lg rounded-t-[2.5rem] shadow-[0_-8px_30px_rgba(74,55,40,0.12)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="material-symbols-outlined mb-1 !text-[26px]">home</span>
+<span class="font-label-md text-[10px]">Anasayfa</span>
+</div>
+<div class="flex flex-col items-center justify-center cursor-pointer group active:scale-95 duration-200">
+<div class="bg-[#FFC107] text-[#322214] rounded-full px-8 py-2 mb-1 flex items-center justify-center shadow-lg shadow-yellow-500/20">
+<span class="material-symbols-outlined !text-[26px]" style="font-variation-settings: 'FILL' 1">restaurant_menu</span>
+</div>
+<span class="font-label-md text-[11px] text-[#322214] font-bold">Menü</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant transition-colors cursor-pointer active:scale-95 duration-200 relative">
+<span class="material-symbols-outlined mb-1 !text-[26px]">shopping_cart</span>
+<span class="font-label-md text-[10px]">Sepet</span>
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-secondary text-white text-[9px] flex items-center justify-center rounded-full font-bold">2</div>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant transition-colors cursor-pointer active:scale-95 duration-200">
+<span class="material-symbols-outlined mb-1 !text-[26px]">loyalty</span>
+<span class="font-label-md text-[10px]">Sadakat</span>
+</div>
+</nav>
+</body></html>

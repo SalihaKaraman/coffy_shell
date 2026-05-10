@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:coffy_shell/theme/app_colors.dart';
-import 'package:coffy_shell/widgets/product_card.dart';
-import 'package:coffy_shell/widgets/category_chip.dart';
 import 'package:coffy_shell/models/product.dart';
-import 'package:coffy_shell/screens/product_detail_screen.dart';
-import 'package:coffy_shell/screens/cart_screen.dart';
-import 'package:coffy_shell/screens/loyalty_card_screen.dart';
-import 'package:coffy_shell/providers/cart_provider.dart';
-
 import 'package:coffy_shell/services/firebase_service.dart';
+import 'package:coffy_shell/providers/cart_provider.dart';
+import 'package:coffy_shell/screens/product_detail_screen.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -27,147 +23,352 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.cream,
-      appBar: AppBar(
-        backgroundColor: AppColors.cream,
-        elevation: 0,
-        title: Text(
-          'Menü',
-          style: Theme.of(
-            context,
-          ).textTheme.headlineMedium?.copyWith(color: AppColors.primary),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.card_giftcard, color: AppColors.earthyBrown),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoyaltyCardScreen(),
-                ),
-              );
-            },
-          ),
-          Consumer<CartProvider>(
-            builder: (context, cart, child) {
-              return Badge(
-                label: Text(cart.totalItems.toString()),
-                isLabelVisible: cart.totalItems > 0,
-                backgroundColor: AppColors.terracotta,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.shopping_bag_outlined,
-                    color: AppColors.earthyBrown,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CartScreen(),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ],
-      ),
       body: StreamBuilder<List<Product>>(
         stream: _firebaseService.getProducts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.terracotta),
-            );
+            return const Center(child: CircularProgressIndicator(color: AppColors.terracotta));
           }
           if (snapshot.hasError) {
             return Center(child: Text('Hata: ${snapshot.error}'));
           }
 
-          final allProducts = snapshot.data ?? [];
+          final products = snapshot.data ?? [];
           final filteredProducts = selectedCategory == 'Tümü'
-              ? allProducts
-              : allProducts
-                    .where((p) => p.category == selectedCategory)
-                    .toList();
+              ? products
+              : products.where((p) => p.category == selectedCategory).toList();
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Categories
-              SizedBox(
-                height: 60,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              // Custom App Bar
+              SliverAppBar(
+                floating: true,
+                backgroundColor: AppColors.cream,
+                elevation: 0,
+                centerTitle: true,
+                leading: IconButton(
+                  icon: const Icon(Icons.menu, color: AppColors.primary),
+                  onPressed: () {},
+                ),
+                title: Text(
+                  'L\'Artisan',
+                  style: GoogleFonts.playfairDisplay(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26,
                   ),
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: CategoryChip(
-                        label: categories[index],
-                        isSelected: selectedCategory == categories[index],
-                        onTap: () {
-                          setState(() {
-                            selectedCategory = categories[index];
-                          });
-                        },
-                      ),
-                    );
-                  },
+                ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.search, color: AppColors.primary),
+                    onPressed: () {},
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 16.0),
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: AppColors.surfaceVariant,
+                      backgroundImage: NetworkImage('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Featured Card (Günün Seçkisi)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
+                  child: _buildFeaturedCard(context),
                 ),
               ),
 
-              // Product Grid
-              Expanded(
-                child: filteredProducts.isEmpty
-                    ? const Center(
-                        child: Text('Bu kategoride ürün bulunamadı.'),
-                      )
-                    : GridView.builder(
-                        padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.75,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                            ),
-                        itemCount: filteredProducts.length,
+              // Category Selector
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Text(
+                        'Kategoriler',
+                        style: GoogleFonts.outfit(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 46,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: categories.length,
                         itemBuilder: (context, index) {
-                          return ProductCard(
-                            product: filteredProducts[index],
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProductDetailScreen(
-                                    product: filteredProducts[index],
+                          final category = categories[index];
+                          final isSelected = selectedCategory == category;
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: GestureDetector(
+                              onTap: () => setState(() => selectedCategory = category),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? AppColors.primary : Colors.white,
+                                  borderRadius: BorderRadius.circular(23),
+                                  boxShadow: isSelected ? [
+                                    BoxShadow(
+                                      color: AppColors.primary.withOpacity(0.2),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    )
+                                  ] : [],
+                                  border: Border.all(
+                                    color: isSelected ? AppColors.primary : Colors.black12,
                                   ),
                                 ),
-                              );
-                            },
-                            onAdd: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProductDetailScreen(
-                                    product: filteredProducts[index],
+                                child: Center(
+                                  child: Text(
+                                    category,
+                                    style: TextStyle(
+                                      color: isSelected ? Colors.white : AppColors.primary,
+                                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
-                              );
-                            },
+                              ),
+                            ),
                           );
                         },
                       ),
+                    ),
+                  ],
+                ),
               ),
+
+              const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+              // Product Grid
+              filteredProducts.isEmpty
+                  ? const SliverToBoxAdapter(
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(40.0),
+                          child: Text('Bu kategoride ürün bulunamadı.'),
+                        ),
+                      ),
+                    )
+                  : SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      sliver: SliverGrid(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 0.72,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return _MenuProductCard(product: filteredProducts[index]);
+                          },
+                          childCount: filteredProducts.length,
+                        ),
+                      ),
+                    ),
+              
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildFeaturedCard(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(32),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+        image: const DecorationImage(
+          image: NetworkImage('https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=800'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(32),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black.withOpacity(0.1), Colors.black.withOpacity(0.7)],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    'Günün Seçkisi',
+                    style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Artisan Flat White',
+                  style: GoogleFonts.outfit(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.terracotta,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                  ),
+                  child: const Text('Sepete Ekle +', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MenuProductCard extends StatelessWidget {
+  final Product product;
+  const _MenuProductCard({required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProductDetailScreen(product: product)),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 15,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                    child: Image.network(
+                      product.imageUrl,
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: AppColors.surfaceVariant,
+                        child: const Icon(Icons.coffee),
+                      ),
+                    ),
+                  ),
+                  if (product.category == 'Tatlı')
+                    Positioned(
+                      top: 12,
+                      left: 12,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.sageGreen,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          'GEVREK',
+                          style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.outfit(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '₺${product.price.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.terracotta,
+                          fontSize: 15,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.add, color: Colors.white, size: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
