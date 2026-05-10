@@ -8,6 +8,21 @@ class BranchesViewModel extends ChangeNotifier {
   bool loading = false;
   List<Branch> branches = [];
 
+  bool _disposed = false;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
+  }
+
   Future<void> fetchBranches() async {
     loading = true;
     notifyListeners();

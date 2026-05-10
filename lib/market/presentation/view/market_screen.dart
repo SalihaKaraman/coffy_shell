@@ -194,7 +194,7 @@ class _MarketScreenState extends State<MarketScreen> {
                 
                 // Feature Banner
                 Container(
-                  height: 180,
+                  height: 220,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
@@ -220,7 +220,7 @@ class _MarketScreenState extends State<MarketScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(24.0),
+                        padding: const EdgeInsets.all(20.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -424,11 +424,14 @@ class _ProductCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              '${product.price.toStringAsFixed(0)} TL',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+            Expanded(
+              child: Text(
+                '${product.price.toStringAsFixed(0)} TL',
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ),
             Container(
@@ -457,7 +460,7 @@ class _PremiumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 220,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -478,7 +481,7 @@ class _PremiumCard extends StatelessWidget {
               child: Image.network(
                 product.imageUrl,
                 fit: BoxFit.cover,
-                height: 200,
+                height: 220,
                 errorBuilder: (context, error, stackTrace) => Container(
                   color: AppColors.surfaceVariant,
                   child: const Icon(Icons.broken_image),
@@ -489,7 +492,7 @@ class _PremiumCard extends StatelessWidget {
             Expanded(
               flex: 6,
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -540,7 +543,7 @@ class _PremiumCard extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           ),
                           child: const Text(
                             'Sepete Ekle',

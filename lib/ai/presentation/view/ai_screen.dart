@@ -27,200 +27,264 @@ class _AIView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.cream,
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(context, viewModel),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (viewModel.selectedMood == null) ...[
-                    _buildHeader(),
-                    const SizedBox(height: 32),
-                    _buildMoodGrid(viewModel),
-                  ] else ...[
-                    _buildRecommendationResult(context, viewModel),
-                  ],
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context, AIViewModel viewModel) {
-    return SliverAppBar(
-      expandedHeight: 120,
-      floating: true,
-      backgroundColor: AppColors.cream,
-      elevation: 0,
-      leading: viewModel.selectedMood != null 
-        ? IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.primary),
-            onPressed: viewModel.reset,
-          )
-        : null,
-      flexibleSpace: FlexibleSpaceBar(
+      appBar: AppBar(
+        backgroundColor: AppColors.cream,
+        elevation: 0,
         title: Text(
-          'Coffee AI',
+          'AI Assistant',
           style: GoogleFonts.playfairDisplay(
             color: AppColors.primary,
             fontWeight: FontWeight.bold,
-            fontSize: 24,
           ),
         ),
         centerTitle: true,
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Merhaba! Bugün nasıl hissediyorsun?',
-          style: GoogleFonts.outfit(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Moduna en uygun kahveyi yapay zeka ile seçelim.',
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            color: AppColors.onSurfaceVariant.withOpacity(0.7),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMoodGrid(AIViewModel viewModel) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 1.1,
-      ),
-      itemCount: viewModel.moods.length,
-      itemBuilder: (context, index) {
-        final mood = viewModel.moods[index];
-        return _MoodCard(
-          mood: mood,
-          onTap: () => viewModel.selectMood(mood),
-        );
-      },
-    );
-  }
-
-  Widget _buildRecommendationResult(BuildContext context, AIViewModel viewModel) {
-    if (viewModel.isLoading) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 100),
-            _buildAIThinkingAnimation(),
-            const SizedBox(height: 24),
-            Text(
-              'Senin için en iyi seçeneği analiz ediyorum...',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.outfit(
-                fontSize: 18,
-                color: AppColors.primary,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: viewModel.selectedMood!.color.withOpacity(0.2),
-                shape: BoxShape.circle,
-              ),
-              child: Text(
-                viewModel.selectedMood!.emoji,
-                style: const TextStyle(fontSize: 24),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 12),
                   Text(
-                    '${viewModel.selectedMood!.name} bir gün için;',
+                    'How are you feeling today?',
                     style: GoogleFonts.outfit(
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
                     ),
                   ),
-                  Text(
-                    'İşte yapay zeka önerilerim:',
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
-                      color: AppColors.onSurfaceVariant,
+                  const SizedBox(height: 20),
+                  
+                  // Mood Selector
+                  SizedBox(
+                    height: 100,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: viewModel.moods.length,
+                      itemBuilder: (context, index) {
+                        final mood = viewModel.moods[index];
+                        final isSelected = viewModel.selectedMood == mood;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: GestureDetector(
+                            onTap: () => viewModel.selectMood(mood),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 64,
+                                  height: 64,
+                                  decoration: BoxDecoration(
+                                    color: isSelected ? AppColors.primary : Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.05),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Text(mood.emoji, style: const TextStyle(fontSize: 28)),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  mood.name,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                    color: isSelected ? AppColors.primary : Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
+                  
+                  const SizedBox(height: 40),
+                  
+                  // Recommendation Card (Match of the Day)
+                  Text(
+                    viewModel.selectedMood == null ? 'Today\'s Special' : 'AI Recommendation for you',
+                    style: GoogleFonts.outfit(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  if (viewModel.isLoading)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(40.0),
+                        child: CircularProgressIndicator(color: AppColors.terracotta),
+                      ),
+                    )
+                  else if (viewModel.recommendations.isEmpty && viewModel.selectedMood != null)
+                    const Center(child: Text('No matching coffee found for this mood.'))
+                  else
+                    Builder(
+                      builder: (context) {
+                        // Use first recommendation if available, otherwise a default special
+                        final product = viewModel.recommendations.isNotEmpty 
+                          ? viewModel.recommendations.first 
+                          : null;
+                        
+                        if (product == null && viewModel.selectedMood != null) {
+                           return const Center(child: Text('Finding best match...'));
+                        }
+
+                        final displayImg = product?.imageUrl ?? 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=800';
+                        final displayName = product?.name ?? 'Creamy Latte';
+                        final displayDesc = product?.description ?? 'Smooth and rich texture';
+                        final displayPrice = product?.price.toStringAsFixed(0) ?? '120';
+
+                        return Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(32),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                                child: Image.network(
+                                  displayImg,
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) => Container(
+                                    height: 200,
+                                    color: AppColors.surfaceVariant,
+                                    child: const Icon(Icons.coffee),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                displayName,
+                                                style: GoogleFonts.outfit(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                displayDesc,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(color: Colors.grey, fontSize: 14),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          '₺$displayPrice',
+                                          style: const TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.terracotta,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 24),
+                                    ElevatedButton(
+                                      onPressed: () {},
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary,
+                                        foregroundColor: Colors.white,
+                                        minimumSize: const Size(double.infinity, 56),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                        elevation: 0,
+                                      ),
+                                      child: const Text('Quick Order', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),
-          ],
-        ),
-        const SizedBox(height: 32),
-        if (viewModel.recommendations.isEmpty)
-          const Center(child: Text('Üzgünüm, şu an uygun bir öneri bulamadım.'))
-        else
-          ...viewModel.recommendations.map((product) => _RecommendationCard(product: product)),
-        
-        const SizedBox(height: 24),
-        Center(
-          child: TextButton.icon(
-            onPressed: viewModel.reset,
-            icon: const Icon(Icons.refresh, color: AppColors.terracotta),
-            label: Text(
-              'Farklı bir mod seç',
-              style: GoogleFonts.outfit(color: AppColors.terracotta, fontWeight: FontWeight.bold),
+          ),
+          
+          // Bottom Chat Field
+          Container(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, -5),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: AppColors.cream,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Ask anything to AI...',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(
+                    color: AppColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.send, color: Colors.white, size: 20),
+                ),
+              ],
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAIThinkingAnimation() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.05),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(AppColors.terracotta.withOpacity(0.5)),
-        ),
+        ],
       ),
     );
   }
