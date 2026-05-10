@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:coffy_shell/theme/app_colors.dart';
 import 'package:coffy_shell/screens/main_screen.dart';
 
+import 'package:coffy_shell/screens/loyalty_card_screen.dart';
+
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -156,8 +158,14 @@ class WelcomeScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _buildSecondaryAction(
+                          context: context,
                           icon: Icons.history,
                           label: 'Sipariş Takibi',
+                          onTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Aktif siparişiniz bulunmamaktadır.')),
+                            );
+                          },
                         ),
                       ),
                       Container(
@@ -167,8 +175,15 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                       Expanded(
                         child: _buildSecondaryAction(
+                          context: context,
                           icon: Icons.card_giftcard,
                           label: 'Loyalty Kart',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const LoyaltyCardScreen()),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -183,22 +198,31 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSecondaryAction({required IconData icon, required String label}) {
+  Widget _buildSecondaryAction({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
-      onTap: () {},
-      child: Column(
-        children: [
-          Icon(icon, size: 24, color: AppColors.primary.withOpacity(0.6)),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: GoogleFonts.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColors.primary.withOpacity(0.6),
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          children: [
+            Icon(icon, size: 24, color: AppColors.primary.withOpacity(0.6)),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: GoogleFonts.outfit(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColors.primary.withOpacity(0.6),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
