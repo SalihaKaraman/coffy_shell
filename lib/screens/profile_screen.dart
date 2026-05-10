@@ -63,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Ahmet Yılmaz',
+              'Kullanıcı',
               style: GoogleFonts.playfairDisplay(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

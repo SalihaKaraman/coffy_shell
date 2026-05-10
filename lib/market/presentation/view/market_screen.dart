@@ -47,7 +47,7 @@ class _MarketScreenState extends State<MarketScreen> {
           onPressed: () {},
         ),
         title: Text(
-          'L\'Artisan Market',
+          'CoffyShell Market',
           style: GoogleFonts.playfairDisplay(
             color: AppColors.primary,
             fontWeight: FontWeight.bold,

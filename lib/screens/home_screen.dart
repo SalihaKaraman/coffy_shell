@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                 elevation: 0,
                 toolbarHeight: 80,
                 title: Text(
-                  'L\'Artisan Café',
+                  'CoffyShell',
                   style: GoogleFonts.playfairDisplay(
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
