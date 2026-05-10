@@ -5,6 +5,8 @@ import 'package:coffy_shell/theme/app_colors.dart';
 import 'package:coffy_shell/ai/presentation/view_model/ai_view_model.dart';
 import 'package:coffy_shell/ai/domain/entity/mood.dart';
 import 'package:coffy_shell/models/product.dart';
+import 'package:coffy_shell/widgets/profile_action_button.dart';
+import 'package:coffy_shell/widgets/cart_action_button.dart';
 
 class AIScreen extends StatelessWidget {
   const AIScreen({super.key});
@@ -38,6 +40,10 @@ class _AIView extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        actions: const [
+          CartActionButton(),
+          ProfileActionButton(),
+        ],
       ),
       body: Column(
         children: [

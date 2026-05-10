@@ -6,6 +6,9 @@ import 'package:coffy_shell/models/product.dart';
 import 'package:coffy_shell/services/firebase_service.dart';
 import 'package:coffy_shell/providers/cart_provider.dart';
 import 'package:coffy_shell/screens/product_detail_screen.dart';
+import 'package:coffy_shell/widgets/profile_action_button.dart';
+import 'package:coffy_shell/widgets/cart_action_button.dart';
+import 'package:coffy_shell/providers/favorites_provider.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -59,19 +62,9 @@ class _MenuScreenState extends State<MenuScreen> {
                     fontSize: 26,
                   ),
                 ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.search, color: AppColors.primary),
-                    onPressed: () {},
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: CircleAvatar(
-                      radius: 18,
-                      backgroundColor: AppColors.surfaceVariant,
-                      backgroundImage: NetworkImage('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'),
-                    ),
-                  ),
+                actions: const [
+                  CartActionButton(),
+                  ProfileActionButton(),
                 ],
               ),
 
@@ -324,6 +317,27 @@ class _MenuProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: Consumer<FavoritesProvider>(
+                        builder: (context, favorites, child) {
+                          final isFav = favorites.isFavorite(product);
+                          return GestureDetector(
+                            onTap: () => favorites.toggleFavorite(product),
+                            child: CircleAvatar(
+                              radius: 16,
+                              backgroundColor: Colors.white.withOpacity(0.9),
+                              child: Icon(
+                                isFav ? Icons.favorite : Icons.favorite_border,
+                                color: isFav ? AppColors.terracotta : Colors.grey,
+                                size: 18,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -354,13 +368,25 @@ class _MenuProductCard extends StatelessWidget {
                           fontSize: 15,
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
+                      GestureDetector(
+                        onTap: () {
+                          context.read<CartProvider>().addToCart(product);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${product.name} sepete eklendi!'),
+                              backgroundColor: AppColors.secondary,
+                              duration: const Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.add, color: Colors.white, size: 16),
                         ),
-                        child: const Icon(Icons.add, color: Colors.white, size: 16),
                       ),
                     ],
                   ),

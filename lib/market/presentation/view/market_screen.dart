@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:coffy_shell/theme/app_colors.dart';
 import 'package:coffy_shell/market/presentation/mvvm/market_view_model.dart';
 import 'package:coffy_shell/market/domain/entity/catalog_product.dart';
+import 'package:coffy_shell/widgets/profile_action_button.dart';
+import 'package:coffy_shell/widgets/cart_action_button.dart';
+import 'package:coffy_shell/providers/cart_provider.dart';
+import 'package:coffy_shell/providers/favorites_provider.dart';
+import 'package:coffy_shell/models/product.dart';
 
 class MarketScreen extends StatefulWidget {
   const MarketScreen({super.key});
@@ -49,34 +55,9 @@ class _MarketScreenState extends State<MarketScreen> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.shopping_bag_outlined, color: AppColors.primary),
-                onPressed: () {},
-              ),
-              Positioned(
-                right: 8,
-                top: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: AppColors.terracotta,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Text(
-                    '2',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        actions: const [
+          CartActionButton(),
+          ProfileActionButton(),
         ],
       ),
       body: ListenableBuilder(
@@ -187,10 +168,9 @@ class _MarketScreenState extends State<MarketScreen> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    image: DecorationImage(
-                      image: const NetworkImage('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800'),
+                    image: const DecorationImage(
+                      image: NetworkImage('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800'),
                       fit: BoxFit.cover,
-                      onError: (exception, stackTrace) => print('Banner image error'),
                     ),
                   ),
                   child: Stack(
@@ -293,7 +273,7 @@ class _MarketScreenState extends State<MarketScreen> {
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: AppColors.tertiary,
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: Row(
@@ -301,12 +281,12 @@ class _MarketScreenState extends State<MarketScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.sageGreen.withOpacity(0.2),
+                          color: AppColors.secondary.withOpacity(0.2),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.coffee_maker_outlined,
-                          color: AppColors.sageGreen,
+                          color: AppColors.secondary,
                           size: 32,
                         ),
                       ),
@@ -338,7 +318,7 @@ class _MarketScreenState extends State<MarketScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 120),
               ],
             ),
           );
@@ -354,6 +334,8 @@ class _ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = context.read<CartProvider>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -388,10 +370,30 @@ class _ProductCard extends StatelessWidget {
               Positioned(
                 right: 12,
                 top: 12,
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.white.withOpacity(0.9),
-                  child: const Icon(Icons.favorite_border, size: 20, color: Colors.grey),
+                child: Consumer<FavoritesProvider>(
+                  builder: (context, favorites, child) {
+                    final p = Product(
+                      id: product.id,
+                      name: product.name,
+                      description: product.description,
+                      price: product.price,
+                      imageUrl: product.imageUrl,
+                      category: product.category,
+                    );
+                    final isFav = favorites.isFavorite(p);
+                    return GestureDetector(
+                      onTap: () => favorites.toggleFavorite(p),
+                      child: CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.white.withOpacity(0.9),
+                        child: Icon(
+                          isFav ? Icons.favorite : Icons.favorite_border,
+                          size: 20,
+                          color: isFav ? AppColors.terracotta : Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -400,7 +402,7 @@ class _ProductCard extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           product.category,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.terracotta,
             fontSize: 10,
             fontWeight: FontWeight.bold,
@@ -431,16 +433,36 @@ class _ProductCard extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(
-                Icons.shopping_cart_outlined,
-                color: Colors.white,
-                size: 18,
+            GestureDetector(
+              onTap: () {
+                final p = Product(
+                  id: product.id,
+                  name: product.name,
+                  description: product.description,
+                  price: product.price,
+                  imageUrl: product.imageUrl,
+                  category: product.category,
+                );
+                cartProvider.addToCart(p);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${product.name} sepete eklendi!'),
+                    backgroundColor: AppColors.secondary,
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.shopping_cart_outlined,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
             ),
           ],
@@ -456,6 +478,8 @@ class _PremiumCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = context.read<CartProvider>();
+
     return Container(
       height: 220,
       decoration: BoxDecoration(
@@ -486,75 +510,92 @@ class _PremiumCard extends StatelessWidget {
               ),
             ),
           ),
-            Expanded(
-              flex: 6,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Premium Seri',
-                      style: TextStyle(
-                        color: AppColors.terracotta,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+          Expanded(
+            flex: 6,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Premium Seri',
+                    style: TextStyle(
+                      color: AppColors.terracotta,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      product.name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    product.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      product.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: AppColors.onSurfaceVariant.withOpacity(0.7),
-                        fontSize: 12,
-                        height: 1.4,
-                      ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    product.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.primary.withOpacity(0.7),
+                      fontSize: 12,
+                      height: 1.4,
                     ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${product.price.toStringAsFixed(0)} TL',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${product.price.toStringAsFixed(0)} TL',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.terracotta,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          final p = Product(
+                            id: product.id,
+                            name: product.name,
+                            description: product.description,
+                            price: product.price,
+                            imageUrl: product.imageUrl,
+                            category: product.category,
+                          );
+                          cartProvider.addToCart(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${product.name} sepete eklendi!'),
+                              backgroundColor: AppColors.secondary,
+                              duration: const Duration(seconds: 1),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.terracotta,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Text(
-                            'Sepete Ekle',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                        child: const Text(
+                          'Sepete Ekle',
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

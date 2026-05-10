@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:coffy_shell/theme/app_colors.dart';
 import 'package:coffy_shell/branches/presentation/mvvm/branches_view_model.dart';
 import 'package:coffy_shell/branches/domain/entity/branch.dart';
+import 'package:coffy_shell/widgets/profile_action_button.dart';
+import 'package:coffy_shell/widgets/cart_action_button.dart';
 
 class BranchesScreen extends StatefulWidget {
   const BranchesScreen({super.key});
@@ -86,6 +88,10 @@ class _BranchesScreenState extends State<BranchesScreen> {
           ),
         ),
         centerTitle: true,
+        actions: const [
+          CartActionButton(),
+          ProfileActionButton(),
+        ],
       ),
       body: ListenableBuilder(
         listenable: branchesViewModel,

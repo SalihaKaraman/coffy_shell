@@ -7,6 +7,11 @@ import 'package:coffy_shell/providers/navigation_provider.dart';
 import 'package:coffy_shell/providers/cart_provider.dart';
 import 'package:coffy_shell/services/firebase_service.dart';
 import 'package:coffy_shell/models/product.dart';
+import 'package:coffy_shell/providers/favorites_provider.dart';
+import 'package:coffy_shell/widgets/profile_action_button.dart';
+import 'package:coffy_shell/widgets/cart_action_button.dart';
+
+import 'package:coffy_shell/screens/favorites_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -52,7 +57,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 actions: const [
-                  SizedBox(width: 20),
+                  CartActionButton(),
+                  ProfileActionButton(),
                 ],
               ),
 
@@ -205,7 +211,12 @@ class HomeScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         children: [
-                          _buildActionItem('Favoriler', Icons.favorite, () => navProvider.setIndex(1)),
+                          _buildActionItem('Favoriler', Icons.favorite, () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+                            );
+                          }),
                           _buildActionItem('Tekrarla', Icons.replay, () {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Son siparişiniz sepete eklendi!')),
@@ -340,17 +351,42 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                product.imageUrl,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  color: AppColors.surfaceVariant,
-                  child: const Icon(Icons.coffee),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    product.imageUrl,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: AppColors.surfaceVariant,
+                      child: const Icon(Icons.coffee),
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Consumer<FavoritesProvider>(
+                    builder: (context, favorites, child) {
+                      final isFav = favorites.isFavorite(product);
+                      return GestureDetector(
+                        onTap: () => favorites.toggleFavorite(product),
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: Colors.white.withOpacity(0.9),
+                          child: Icon(
+                            isFav ? Icons.favorite : Icons.favorite_border,
+                            color: isFav ? AppColors.terracotta : Colors.grey,
+                            size: 16,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 10),
