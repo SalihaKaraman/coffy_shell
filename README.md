@@ -24,9 +24,7 @@ CoffyShell, kahve tutkunları için özel olarak tasarlanmış, modern ve kullan
 | :---: | :---: | :---: |
 | ![Cart](ScreenShots/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-05-10%20at%2013.10.06.png) | ![Profile](ScreenShots/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-05-10%20at%2013.10.18.png) | ![Favorites](ScreenShots/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-05-10%20at%2013.10.49.png) |
 
-| Sadakat Kartı |
-| :---: |
-| ![Loyalty](ScreenShots/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-05-10%20at%2013.10.56.png) |
+
 
 ## 🛠 Kullanılan Teknolojiler
 
