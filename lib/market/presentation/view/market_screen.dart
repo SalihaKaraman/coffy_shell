@@ -363,11 +363,6 @@ class _ProductCard extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                    image: NetworkImage(product.imageUrl),
-                    fit: BoxFit.cover,
-                    onError: (exception, stackTrace) => print('Product image error'),
-                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
@@ -375,6 +370,19 @@ class _ProductCard extends StatelessWidget {
                       offset: const Offset(0, 5),
                     ),
                   ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    product.imageUrl,
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: AppColors.surfaceVariant,
+                      child: const Icon(Icons.broken_image, color: Colors.grey),
+                    ),
+                  ),
                 ),
               ),
               Positioned(

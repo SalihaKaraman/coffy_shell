@@ -4,8 +4,10 @@ import 'package:coffy_shell/screens/menu_screen.dart';
 import 'package:coffy_shell/market/presentation/view/market_screen.dart';
 import 'package:coffy_shell/branches/presentation/view/branches_screen.dart';
 import 'package:coffy_shell/ai/presentation/view/ai_screen.dart';
+import 'package:coffy_shell/providers/navigation_provider.dart';
 import 'package:coffy_shell/theme/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -15,8 +17,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
   final List<Widget> _screens = [
     const HomeScreen(),
     const MenuScreen(),
@@ -27,22 +27,23 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final navProvider = context.watch<NavigationProvider>();
     return Scaffold(
       body: Stack(
         children: [
-          _screens[_currentIndex],
+          _screens[navProvider.currentIndex],
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
-            child: _buildBottomNav(),
+            child: _buildBottomNav(navProvider),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBottomNav() {
+  Widget _buildBottomNav(NavigationProvider navProvider) {
     return Container(
       height: 90,
       margin: const EdgeInsets.all(20),
@@ -61,20 +62,20 @@ class _MainScreenState extends State<MainScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: _buildNavItem(0, Icons.home_rounded, 'Anasayfa')),
-          Expanded(child: _buildNavItem(1, Icons.restaurant_menu_rounded, 'Menü')),
-          Expanded(child: _buildNavItem(2, Icons.storefront_rounded, 'Şubeler')),
-          Expanded(child: _buildNavItem(3, Icons.shopping_bag_rounded, 'Market')),
-          Expanded(child: _buildNavItem(4, Icons.auto_awesome_rounded, 'AI')),
+          Expanded(child: _buildNavItem(0, Icons.home_rounded, 'Anasayfa', navProvider)),
+          Expanded(child: _buildNavItem(1, Icons.restaurant_menu_rounded, 'Menü', navProvider)),
+          Expanded(child: _buildNavItem(2, Icons.storefront_rounded, 'Şubeler', navProvider)),
+          Expanded(child: _buildNavItem(3, Icons.shopping_bag_rounded, 'Market', navProvider)),
+          Expanded(child: _buildNavItem(4, Icons.auto_awesome_rounded, 'AI', navProvider)),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, String label) {
-    final isSelected = _currentIndex == index;
+  Widget _buildNavItem(int index, IconData icon, String label, NavigationProvider navProvider) {
+    final isSelected = navProvider.currentIndex == index;
     return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
+      onTap: () => navProvider.setIndex(index),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

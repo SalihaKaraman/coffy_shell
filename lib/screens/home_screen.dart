@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:coffy_shell/theme/app_colors.dart';
 import 'package:coffy_shell/screens/loyalty_card_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:coffy_shell/providers/navigation_provider.dart';
+import 'package:coffy_shell/providers/cart_provider.dart';
+import 'package:coffy_shell/services/firebase_service.dart';
+import 'package:coffy_shell/models/product.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final navProvider = context.read<NavigationProvider>();
+    final cartProvider = context.read<CartProvider>();
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
@@ -96,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 12),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () => navProvider.setIndex(1),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.secondary,
                                   foregroundColor: Colors.white,
@@ -119,64 +127,57 @@ class HomeScreen extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryContainer,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.1),
-                          blurRadius: 30,
-                          offset: const Offset(0, 15),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Sadakat Puanların',
-                              style: TextStyle(color: Colors.white60, fontSize: 12, fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                const Text(
-                                  '1,240',
-                                  style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(width: 8),
-                                Icon(Icons.stars, color: AppColors.secondaryContainer, size: 20),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Bir sonraki kahven bizden! (8/10)',
-                              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: CircularProgressIndicator(
-                                value: 0.8,
-                                strokeWidth: 4,
-                                backgroundColor: Colors.white.withOpacity(0.1),
-                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.secondaryContainer),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoyaltyCardScreen()),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryContainer,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.1),
+                            blurRadius: 30,
+                            offset: const Offset(0, 15),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Sadakat Puanların',
+                                style: TextStyle(color: Colors.white60, fontSize: 12, fontWeight: FontWeight.w500),
                               ),
-                            ),
-                            Icon(Icons.local_cafe, color: AppColors.secondaryContainer, size: 24),
-                          ],
-                        ),
-                      ],
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  const Text(
+                                    '1,240',
+                                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Icon(Icons.stars, color: AppColors.secondaryContainer, size: 20),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                'Bir sonraki kahven bizden! (8/10)',
+                                style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                          const Icon(Icons.arrow_forward_ios, color: Colors.white54, size: 20),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -188,7 +189,7 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                       child: Text(
                         'Hızlı İşlemler',
                         style: GoogleFonts.playfairDisplay(
@@ -204,11 +205,17 @@ class HomeScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         children: [
-                          _buildActionItem('Favoriler', Icons.favorite),
-                          _buildActionItem('Tekrarla', Icons.replay),
-                          _buildActionItem('Cüzdan', Icons.payments),
-                          _buildActionItem('Hediye', Icons.card_giftcard),
-                          _buildActionItem('Yakında', Icons.location_on),
+                          _buildActionItem('Favoriler', Icons.favorite, () => navProvider.setIndex(1)),
+                          _buildActionItem('Tekrarla', Icons.replay, () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Son siparişiniz sepete eklendi!')),
+                            );
+                          }),
+                          _buildActionItem('Cüzdan', Icons.payments, () {
+                             Navigator.push(context, MaterialPageRoute(builder: (context) => const LoyaltyCardScreen()));
+                          }),
+                          _buildActionItem('Hediye', Icons.card_giftcard, () {}),
+                          _buildActionItem('Şubeler', Icons.location_on, () => navProvider.setIndex(2)),
                         ],
                       ),
                     ),
@@ -216,7 +223,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              // Recommendations
+              // Recommendations Header
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(24, 32, 24, 16),
@@ -233,36 +240,54 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Text(
-                        'Tümünü Gör',
-                        style: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold),
+                      GestureDetector(
+                        onTap: () => navProvider.setIndex(1),
+                        child: const Text(
+                          'Tümünü Gör',
+                          style: TextStyle(color: AppColors.secondary, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
 
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 0.85,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final products = [
-                        {'name': 'Flat White', 'price': '85.00', 'img': 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=500'},
-                        {'name': 'Artisan Cortado', 'price': '78.00', 'img': 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=500'},
-                      ];
-                      final p = products[index % 2];
-                      return _buildProductCard(p['name']!, p['price']!, p['img']!);
-                    },
-                    childCount: 4,
-                  ),
-                ),
+              // Recommendations Grid
+              StreamBuilder<List<Product>>(
+                stream: FirebaseService().getProducts(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const SliverToBoxAdapter(
+                      child: Center(child: Text('Ürünler yüklenirken hata oluştu.')),
+                    );
+                  }
+                  if (!snapshot.hasData) {
+                    return const SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator(color: AppColors.terracotta)),
+                    );
+                  }
+
+                  final products = snapshot.data!.take(4).toList();
+                  
+                  return SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    sliver: SliverGrid(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 20,
+                        childAspectRatio: 0.82,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final product = products[index];
+                          return _buildProductCard(context, product, cartProvider);
+                        },
+                        childCount: products.length,
+                      ),
+                    ),
+                  );
+                },
               ),
 
               const SliverToBoxAdapter(child: SizedBox(height: 120)),
@@ -273,32 +298,35 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionItem(String label, IconData icon) {
+  Widget _buildActionItem(String label, IconData icon, VoidCallback onTap) {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
-      child: Column(
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: AppColors.surfaceVariant,
-              borderRadius: BorderRadius.circular(16),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceVariant,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(icon, color: AppColors.secondary, size: 28),
             ),
-            child: Icon(icon, color: AppColors.secondary, size: 28),
-          ),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-        ],
+            const SizedBox(height: 8),
+            Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildProductCard(String name, String price, String img) {
+  Widget _buildProductCard(BuildContext context, Product product, CartProvider cartProvider) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -315,25 +343,48 @@ class HomeScreen extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.network(
-                img,
+                product.imageUrl,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(color: AppColors.surfaceVariant),
+                errorBuilder: (context, error, stackTrace) => Container(
+                  color: AppColors.surfaceVariant,
+                  child: const Icon(Icons.coffee),
+                ),
               ),
             ),
           ),
           const SizedBox(height: 10),
-          Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+          Text(
+            product.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          ),
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('₺$price', style: const TextStyle(fontWeight: FontWeight.w900, color: AppColors.primary)),
-              Container(
-                width: 32,
-                height: 32,
-                decoration: const BoxDecoration(color: AppColors.secondary, shape: BoxShape.circle),
-                child: const Icon(Icons.add, color: Colors.white, size: 20),
+              Text(
+                '₺${product.price.toStringAsFixed(0)}',
+                style: const TextStyle(fontWeight: FontWeight.w900, color: AppColors.primary),
+              ),
+              GestureDetector(
+                onTap: () {
+                  cartProvider.addToCart(product);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${product.name} sepete eklendi!'),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor: AppColors.secondary,
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: const BoxDecoration(color: AppColors.secondary, shape: BoxShape.circle),
+                  child: const Icon(Icons.add, color: Colors.white, size: 20),
+                ),
               ),
             ],
           ),

@@ -6,6 +6,7 @@ import 'package:coffy_shell/firebase_options.dart';
 import 'package:coffy_shell/app.dart';
 import 'package:coffy_shell/services/firebase_service.dart';
 import 'package:coffy_shell/providers/cart_provider.dart';
+import 'package:coffy_shell/providers/navigation_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +22,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
       ],
       child: const App(),
     ),
