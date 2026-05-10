@@ -19,25 +19,25 @@ class AIViewModel extends ChangeNotifier {
 
   final List<Mood> moods = [
     const Mood(
-      name: 'Tired', 
+      name: 'Yorgun', 
       emoji: '🥱', 
       color: Color(0xFF9E9E9E), 
       categories: ['Kahve'],
     ),
     const Mood(
-      name: 'Flow', 
+      name: 'Odaklanmış', 
       emoji: '🌊', 
       color: Color(0xFF64B5F6), 
       categories: ['Kahve'],
     ),
     const Mood(
-      name: 'Relaxed', 
+      name: 'Sakin', 
       emoji: '🧘', 
       color: AppColors.sageGreen, 
       categories: ['Çay', 'Kahve'],
     ),
     const Mood(
-      name: 'Curious', 
+      name: 'Meraklı', 
       emoji: '🧐', 
       color: Color(0xFFBA68C8), 
       categories: ['Kahve', 'Tatlı'],
@@ -68,7 +68,7 @@ class AIViewModel extends ChangeNotifier {
     }).toList();
 
     // Sort or refine based on "AI" rules
-    if (mood.name == 'Tired') {
+    if (mood.name == 'Yorgun') {
       // Prioritize strong caffeinated drinks
       _recommendations = _recommendations.where((p) {
         final n = p.name.toLowerCase();
@@ -76,21 +76,21 @@ class AIViewModel extends ChangeNotifier {
         return n.contains('espresso') || n.contains('double') || n.contains('cortado') || d.contains('kafein') || d.contains('sert');
       }).toList();
       if (_recommendations.isEmpty) _recommendations = _allProducts.where((p) => p.category == 'Kahve').toList();
-    } else if (mood.name == 'Relaxed') {
+    } else if (mood.name == 'Sakin') {
       // Prioritize tea or milk-based light coffee
       _recommendations = _recommendations.where((p) {
         final n = p.name.toLowerCase();
         final d = p.description.toLowerCase();
         return p.category == 'Çay' || n.contains('latte') || n.contains('flat') || d.contains('süt') || d.contains('yumuşak');
       }).toList();
-    } else if (mood.name == 'Flow') {
+    } else if (mood.name == 'Odaklanmış') {
       // Prioritize black coffee or balanced drinks
       _recommendations = _recommendations.where((p) {
         final n = p.name.toLowerCase();
         final d = p.description.toLowerCase();
         return n.contains('filter') || n.contains('americano') || n.contains('v60') || d.contains('taze') || d.contains('odak');
       }).toList();
-    } else if (mood.name == 'Curious') {
+    } else if (mood.name == 'Meraklı') {
       // Prioritize specials, treats or high rated items
       _recommendations.sort((a, b) => b.rating.compareTo(a.rating));
     }

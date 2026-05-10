@@ -43,22 +43,8 @@ class HomeScreen extends StatelessWidget {
                     fontSize: 28,
                   ),
                 ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.primary.withOpacity(0.1), width: 2),
-                        image: const DecorationImage(
-                          image: NetworkImage('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
+                actions: const [
+                  SizedBox(width: 20),
                 ],
               ),
 

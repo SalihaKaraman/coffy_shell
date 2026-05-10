@@ -77,17 +77,6 @@ class _MarketScreenState extends State<MarketScreen> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              radius: 18,
-              backgroundColor: AppColors.surfaceVariant,
-              backgroundImage: const NetworkImage('https://i.pravatar.cc/150?img=11'),
-              onBackgroundImageError: (exception, stackTrace) {
-                print('Profile image error: $exception');
-              },
-            ),
-          ),
         ],
       ),
       body: ListenableBuilder(

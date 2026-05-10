@@ -8,7 +8,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Artisanal Cafe',
+      title: 'CoffyShell',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const WelcomeScreen(),

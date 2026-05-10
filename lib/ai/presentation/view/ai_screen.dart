@@ -31,7 +31,7 @@ class _AIView extends StatelessWidget {
         backgroundColor: AppColors.cream,
         elevation: 0,
         title: Text(
-          'AI Assistant',
+          'Yapay Zeka Asistanı',
           style: GoogleFonts.playfairDisplay(
             color: AppColors.primary,
             fontWeight: FontWeight.bold,
@@ -49,7 +49,7 @@ class _AIView extends StatelessWidget {
                 children: [
                   const SizedBox(height: 12),
                   Text(
-                    'How are you feeling today?',
+                    'Bugün nasıl hissediyorsun?',
                     style: GoogleFonts.outfit(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -113,7 +113,7 @@ class _AIView extends StatelessWidget {
                   
                   // Recommendation Card (Match of the Day)
                   Text(
-                    viewModel.selectedMood == null ? 'Today\'s Special' : 'AI Recommendation for you',
+                    viewModel.selectedMood == null ? 'Günün Özeli' : 'Sana Özel Öneri',
                     style: GoogleFonts.outfit(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -130,7 +130,7 @@ class _AIView extends StatelessWidget {
                       ),
                     )
                   else if (viewModel.recommendations.isEmpty && viewModel.selectedMood != null)
-                    const Center(child: Text('No matching coffee found for this mood.'))
+                    const Center(child: Text('Bu mod için uygun kahve bulunamadı.'))
                   else
                     Builder(
                       builder: (context) {
@@ -140,12 +140,12 @@ class _AIView extends StatelessWidget {
                           : null;
                         
                         if (product == null && viewModel.selectedMood != null) {
-                           return const Center(child: Text('Finding best match...'));
+                           return const Center(child: Text('En iyi eşleşme bulunuyor...'));
                         }
 
                         final displayImg = product?.imageUrl ?? 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=800';
-                        final displayName = product?.name ?? 'Creamy Latte';
-                        final displayDesc = product?.description ?? 'Smooth and rich texture';
+                        final displayName = product?.name ?? 'Kremalı Latte';
+                        final displayDesc = product?.description ?? 'Yumuşak ve zengin doku';
                         final displayPrice = product?.price.toStringAsFixed(0) ?? '120';
 
                         return Container(
@@ -226,7 +226,7 @@ class _AIView extends StatelessWidget {
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                         elevation: 0,
                                       ),
-                                      child: const Text('Quick Order', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                      child: const Text('Hızlı Sipariş', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                     ),
                                   ],
                                 ),
@@ -266,7 +266,7 @@ class _AIView extends StatelessWidget {
                     ),
                     child: const TextField(
                       decoration: InputDecoration(
-                        hintText: 'Ask anything to AI...',
+                        hintText: 'Yapay Zekaya bir şey sor...',
                         border: InputBorder.none,
                       ),
                     ),
