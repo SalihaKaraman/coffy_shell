@@ -57,7 +57,7 @@ class WelcomeScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   // Logo/Text at top
                   Text(
-                    'L\'Artisan Café',
+                    'CoffyShell',
                     style: GoogleFonts.playfairDisplay(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

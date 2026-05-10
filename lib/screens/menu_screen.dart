@@ -55,7 +55,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   onPressed: () {},
                 ),
                 title: Text(
-                  'L\'Artisan',
+                  'CoffyShell',
                   style: GoogleFonts.playfairDisplay(
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
