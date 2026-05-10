@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:coffy_shell/screens/menu_screen.dart';
+import 'package:coffy_shell/market/presentation/view/market_screen.dart';
+import 'package:coffy_shell/branches/presentation/view/branches_screen.dart';
+import 'package:coffy_shell/ai/presentation/view/ai_screen.dart';
 import 'package:coffy_shell/theme/app_colors.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,9 +17,9 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _screens = [
     const MenuScreen(),
-    const PlaceholderScreen(title: 'Şubeler'),
-    const PlaceholderScreen(title: 'Market'),
-    const PlaceholderScreen(title: 'AI Coffee'),
+    const BranchesScreen(),
+    const MarketScreen(),
+    const AIScreen(),
   ];
 
   @override

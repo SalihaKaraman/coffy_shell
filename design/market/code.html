@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "primary": "#322214",
+                "on-primary-fixed-variant": "#574333",
+                "secondary-fixed": "#ffdbcd",
+                "primary-fixed-dim": "#dec1ac",
+                "on-surface": "#1e1b1a",
+                "tertiary-fixed": "#d2eac0",
+                "outline-variant": "#d2c4bb",
+                "on-surface-variant": "#4e453e",
+                "on-secondary": "#ffffff",
+                "tertiary": "#172a0e",
+                "on-tertiary-container": "#95ac85",
+                "on-secondary-fixed": "#360f00",
+                "on-background": "#1e1b1a",
+                "surface-container-low": "#f9f2ef",
+                "on-error-container": "#93000a",
+                "on-primary-fixed": "#28180b",
+                "inverse-on-surface": "#f6efec",
+                "on-tertiary-fixed": "#0e2006",
+                "inverse-surface": "#33302e",
+                "error-container": "#ffdad6",
+                "surface-container-highest": "#e8e1de",
+                "secondary-fixed-dim": "#ffb596",
+                "tertiary-container": "#2d4022",
+                "surface-dim": "#dfd9d6",
+                "inverse-primary": "#dec1ac",
+                "on-error": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "background": "#fff8f5",
+                "secondary-container": "#fd9a6f",
+                "primary-container": "#4a3728",
+                "on-secondary-container": "#75300d",
+                "on-tertiary-fixed-variant": "#384c2d",
+                "surface-container": "#f3ecea",
+                "surface-variant": "#e8e1de",
+                "surface-bright": "#fff8f5",
+                "surface-tint": "#705a49",
+                "surface": "#fff8f5",
+                "on-secondary-fixed-variant": "#77320e",
+                "primary-fixed": "#fbddc7",
+                "outline": "#80756d",
+                "error": "#ba1a1a",
+                "on-primary-container": "#bba08c",
+                "on-tertiary": "#ffffff",
+                "on-primary": "#ffffff",
+                "surface-container-high": "#eee7e4",
+                "secondary": "#954824"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xs": "4px",
+                "sm": "8px",
+                "md": "16px",
+                "container-margin": "20px",
+                "lg": "24px",
+                "base": "4px",
+                "xl": "32px",
+                "gutter": "16px"
+            },
+            "fontFamily": {
+                "label-lg": ["Inter"],
+                "headline-md": ["Playfair Display"],
+                "body-sm": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-lg": ["Playfair Display"],
+                "body-md": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-xl": ["Playfair Display"]
+            },
+            "fontSize": {
+                "label-lg": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-md": ["22px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                "headline-lg": ["28px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-xl": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .shadow-ambient {
+            box-shadow: 0 15px 35px -5px rgba(74, 55, 40, 0.08);
+        }
+        .scrolling-touch {
+            -webkit-overflow-scrolling: touch;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-container-margin h-16 bg-surface/80 backdrop-blur-md">
+<div class="flex items-center gap-md">
+<button class="active:scale-95 duration-200 text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">L'Artisan Market</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="active:scale-95 duration-200 text-primary relative">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-secondary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User Profile" data-alt="A professional headshot of a friendly person with a warm smile, set against a soft, out-of-focus cafe background with golden morning light. The lighting is high-key and airy, maintaining a minimalist and modern aesthetic. The color palette features soft creams and natural skin tones, perfectly aligning with the artisanal cafe brand's tactile warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj0OeyqerG7uEXoCbu3o4qldW6RN2C8bTvXaxO5UlH5kMfNNBDmpox-4yioq1BLGz1lskdMFd36KsGwup30iTiFxaTaLjrTrCEqLUuPieRJ_V8iR38ndg3Ss3srEfdtBiPbQ8QQZFbTh6m09nnwfVjzQFELj1Ua2LBge5pEqJl_7ckj37ZX3koH_3oJkTXrAwfkVf5fv_f6xKHHK8WgRsJNqrGgh_6EteXck0mVaf06aNApDRU3R8pR0CjYDNjPDrrM33-z4CGDNg"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24">
+<!-- Search Bar Section -->
+<section class="px-container-margin mb-xl">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-4 rounded-xl border-none bg-surface-container-low text-on-surface-variant font-body-md focus:ring-1 focus:ring-primary shadow-sm" placeholder="Kahve veya ekipman ara..." type="text"/>
+</div>
+</section>
+<!-- Category Chips -->
+<section class="mb-xl">
+<div class="flex overflow-x-auto px-container-margin gap-sm hide-scrollbar">
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-lg transition-colors">Hepsi</button>
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-surface-container border border-outline-variant text-on-surface-variant font-label-lg hover:bg-surface-container-high transition-colors">Kahve Çekirdekleri</button>
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-surface-container border border-outline-variant text-on-surface-variant font-label-lg hover:bg-surface-container-high transition-colors">Demleme Ekipmanları</button>
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-surface-container border border-outline-variant text-on-surface-variant font-label-lg hover:bg-surface-container-high transition-colors">Aksesuarlar</button>
+</div>
+</section>
+<!-- Hero Promo Card -->
+<section class="px-container-margin mb-xl">
+<div class="relative h-48 rounded-xl overflow-hidden shadow-ambient group">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="A top-down, artistic view of specialty coffee beans spilling out of a rustic burlap sack onto a clean, cream-colored marble surface. Soft morning sunlight streams in from the side, creating long, delicate shadows and highlighting the oily texture of the dark roasted beans. The overall mood is artisanal, warm, and inviting, reflecting high-quality craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPRCj08YN1TzKhRy9wr3SehlvVj3bIhnCEV_Th77A-AkozeWgyw5EDvlPxb6mQ2tw0U6aYLoc_Ga2CCqy_NjrOzx0yBf1jPHwyFaF7FEIRmAsBMF8NnLAe3NUoOrAGjwHLZ8Plzj2w1pcaVddFCPWMjfHCkasQqk34KBm3wjadGmv4ADO5wApkgYZVUI0h2Axq3Jkv3WQfwxvpxSe25jjFVD8tytF3_fIqIqipL__5ZQ0ZztFz8pDLhoqnoNAHawgXgxLg9ha-T4o"/>
+<div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-transparent flex flex-col justify-center px-lg">
+<span class="text-secondary-fixed font-label-lg mb-xs">Haftanın Seçkisi</span>
+<h2 class="text-white font-headline-md text-headline-md leading-tight mb-md max-w-[200px]">Etiyopya Yirgacheffe %20 İndirim</h2>
+<button class="bg-secondary text-white w-fit px-6 py-2 rounded-full font-label-lg active:scale-95 duration-150">Hemen Al</button>
+</div>
+</div>
+</section>
+<!-- Product Grid - Bento Style -->
+<section class="px-container-margin">
+<h3 class="font-headline-md text-headline-md text-primary mb-lg">Öne Çıkanlar</h3>
+<div class="grid grid-cols-2 gap-md">
+<!-- Product 1 -->
+<div class="bg-surface rounded-xl overflow-hidden shadow-ambient flex flex-col">
+<div class="aspect-square relative overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A minimalist studio shot of a sleek, matte black coffee bag with gold foil lettering sitting on a textured ceramic pedestal. The background is a soft, warm cream tone. The lighting is focused and dramatic, highlighting the premium quality and tactile nature of the packaging. The aesthetic is clean, modern, and deeply artisanal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE35P3kjBMZjGEJDTWeJsDxiwuHnu2m19RJBtdI7f6YPzDTwA1_EnXGBR-7hnYQiFG4TDabmcaDW-t5gefCzFLeRhhBFeQGIvxi_fbGtn4kb4IZVxxsq8F1x2aLGd1t9-JCWVkD9gdE31FZGQ_R-86U-bHqxz8DUt5rgd0j5y5uOSGhKaOtmd-LzAerC9-bLE1uEqOz-D7_sod0XbC-3GB-QMpAwTcp3TsbLeOeznTOvHLopRuJNAOFu8XZTT0zesc8HvTZSK2B0Y"/>
+<button class="absolute top-2 right-2 bg-white/80 backdrop-blur-md p-1.5 rounded-full text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<span class="text-on-surface-variant font-label-md text-xs mb-xs">Kahve Çekirdeği</span>
+<h4 class="font-body-md font-semibold text-primary mb-base leading-tight">L'Artisan Blend (250g)</h4>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-headline-md text-secondary">420 TL</span>
+<button class="bg-primary-container text-on-primary-container p-2 rounded-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="bg-surface rounded-xl overflow-hidden shadow-ambient flex flex-col">
+<div class="aspect-square relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An elegant ceramic V60 coffee dripper in a muted sage green color, resting atop a clear glass server. Steam rises softly from the freshly brewed coffee inside. The scene is set on a light oak wooden table in a sun-drenched corner of a modern cafe. The lighting is warm and natural, evoking a sense of slow, peaceful mornings and craft brewing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAn0UdD7fFTGTRB8UWBQ1kNGXGTpXIqsSTC62yV7hrlXJAY21jZHsvZUdx64A6tVfdjv3gqxrlcwUbPqB1-F2qSkXz3HOHdJB-h7pJCPhVY96lT1Gcy_59Z9HGuddvlY-hAMrtuLm6G1v3nYHHZQvCqLHISxug5iTH7_tp7zyOnUxgu0Y9DNjd5xFclZLpF0Ne0nfyDqRt-NrxuDxCUIeQdX5aJtfXExs-LHou0kf9WFu-SqaUlWEw3AU6_q9WZZxMUKqnM9-QGbNQ"/>
+<button class="absolute top-2 right-2 bg-white/80 backdrop-blur-md p-1.5 rounded-full text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="favorite">favorite</span>
+</button>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<span class="text-on-surface-variant font-label-md text-xs mb-xs">Demleme</span>
+<h4 class="font-body-md font-semibold text-primary mb-base leading-tight">Ceramic V60 Dripper</h4>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-headline-md text-secondary">850 TL</span>
+<button class="bg-primary-container text-on-primary-container p-2 rounded-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Large Bento Product 3 -->
+<div class="col-span-2 bg-surface rounded-xl overflow-hidden shadow-ambient flex">
+<div class="w-2/5 relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-end electric gooseneck kettle in matte white with walnut wood accents, positioned against a minimalist background of warm earth tones. Soft sunlight creates a gentle glow on the kettle's surface. The overall image quality is crisp and professional, emphasizing the sophisticated design and premium materials of the brewing gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKMcS_DrRZtoCdGBk9Gsi_mABwdTBdRAdY1T8cI0g26Ucimwuyrvv32Iw4g34q5tae8D9ZR1pXdF_cC0JJz86eWsC2Tl-XW0GvCoVyKF6CS2iXUXKfVjWEKeZOfdMSRy11RxHx5hLBiPdcWnhDjIPOBUW5mjALS-LlJBfm27OmCRXCP74KjhlcNMtE9cC1Zd0q0IEzrZcrwPEtivujF-mIEh2at0n8ovGPVxGgJ2xX_3KsBdVKWdk3aBhfLDAB3e4ZiCpiXVjNHfE"/>
+</div>
+<div class="w-3/5 p-lg flex flex-col justify-center">
+<span class="text-secondary font-label-lg mb-xs">Premium Seri</span>
+<h4 class="font-headline-md text-primary mb-sm leading-tight">Pro Gooseneck Su Isıtıcı</h4>
+<p class="text-on-surface-variant font-body-sm mb-md">Hassas döküm için özel tasarım, ahşap detaylı.</p>
+<div class="flex items-center justify-between">
+<span class="font-headline-md text-secondary">3.450 TL</span>
+<button class="bg-secondary text-white px-4 py-2 rounded-full font-label-lg active:scale-95 transition-transform">Sepete Ekle</button>
+</div>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="bg-surface rounded-xl overflow-hidden shadow-ambient flex flex-col">
+<div class="aspect-square relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a single, artisan-crafted ceramic mug with a unique speckled glaze in shades of cream and earthy brown. The mug is filled with rich, creamy latte art. The lighting is soft and directional, highlighting the handmade texture of the clay. The atmosphere is cozy and suggests a moment of indulgence in a high-quality digital hygge setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEyU3xWeNbvTH1RaDVrqdmpalQwV3wV1KYzmRGRN3mKuci-jBZpqFfiDbzEoIQ6vdtBwTH3amiclfK9jIBTCh22aHsO9S8pOPf_Gyfk92DBVX_7sbKG7AWV8iItuXoD3l4UQaBVfndt2jntRCsf2qxLYB499I7gxFnlfUv0tQWAEvea4xz5QTbE5FGlqWkiV2FhTOu9Yo-eLozpz9EDGnjFmMdYfusfSLNOKehOyFQl4PnQBqEedyDyrPW5vFxgeIEpIgB-eZhNCg"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<span class="text-on-surface-variant font-label-md text-xs mb-xs">Aksesuar</span>
+<h4 class="font-body-md font-semibold text-primary mb-base leading-tight">El Yapımı Seramik Kupa</h4>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-headline-md text-secondary">550 TL</span>
+<button class="bg-primary-container text-on-primary-container p-2 rounded-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 5 -->
+<div class="bg-surface rounded-xl overflow-hidden shadow-ambient flex flex-col">
+<div class="aspect-square relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist layout of premium white paper coffee filters stacked neatly next to a sleek, modern glass carafe. The scene is illuminated by bright, diffused lighting that emphasizes the purity and simplicity of the brewing process. The color palette is dominated by whites and soft greys, creating a refreshing and organized visual feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArr6KHvCu1IuM-zXJKNOxykXmC_ayWPixSCcgT6wqY-YpAwfYsQ8FjXcXpfQTWsoTIoP8O8uLsX5JLGrGl4x0DpS7e9-RzCtusQNfj4ksKN1qoMvFSeOX2WjrwQScRYUZ2aiOyaBd2C1LYF9yWqKMYlaCuE6eYE36mNlAJ8NIMePWvQFOaLlww-zFc2y1ziIZ4CBRgfkXaslWEyj4AZ4nQpiRMoU_dglBUAveJcy2j0JQgMmCwV7R0jKxCq9HWfBN3KYGC0CgsdlE"/>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<span class="text-on-surface-variant font-label-md text-xs mb-xs">Demleme</span>
+<h4 class="font-body-md font-semibold text-primary mb-base leading-tight">V60 Filtre Kağıdı (100 Adet)</h4>
+<div class="mt-auto flex items-center justify-between">
+<span class="font-headline-md text-secondary">195 TL</span>
+<button class="bg-primary-container text-on-primary-container p-2 rounded-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Story / Social Proof Section -->
+<section class="px-container-margin mt-xl mb-xl">
+<div class="bg-tertiary-container rounded-2xl p-lg text-on-tertiary-container flex items-center gap-md">
+<div class="w-16 h-16 rounded-full bg-tertiary-fixed flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-on-tertiary-fixed text-3xl" data-icon="local_cafe">local_cafe</span>
+</div>
+<div>
+<h4 class="font-headline-md text-white mb-xs">Kendi Baristanız Olun</h4>
+<p class="font-body-sm opacity-90">Atölyelerimize katılın ve en iyi demleme tekniklerini uzmanlarımızdan öğrenin.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe h-20 bg-surface/90 backdrop-blur-lg rounded-t-xl shadow-[0_-4px_20px_rgba(74,55,40,0.08)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-label-md text-label-md">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="store">store</span>
+<span class="font-label-md text-label-md">Branches</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1.5 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-md text-label-md">Market</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-md text-label-md">AI</span>
+</a>
+</nav>
+</body></html>

@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffy_shell/branches/data/model/branch_model.dart';
 import 'package:coffy_shell/branches/domain/entity/branch.dart';
-import 'package:coffy_shell/branches/domain/repository/i_branch_repository.dart';
 
-class BranchRepository implements IBranchRepository {
-  @override
+class BranchRepository {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Future<List<Branch>> getBranches() async {
-    await Future.delayed(Duration(seconds: 2)); // Simulate network delay
-
-    final models = [BranchModel(name: 'Kahve Dünyası'), BranchModel(name: 'Juan Valdez')];
-
-    return models.map((model) => model.toEntity()).toList();
+    try {
+      final snapshot = await _firestore.collection('branches').get();
+      return snapshot.docs.map((doc) => BranchModel.fromMap(doc.data(), doc.id).toEntity()).toList();
+    } catch (e) {
+      print('BranchRepository Error: $e');
+      return [];
+    }
   }
 }

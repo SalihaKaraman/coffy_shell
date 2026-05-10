@@ -152,34 +152,11 @@ class _MenuScreenState extends State<MenuScreen> {
                               );
                             },
                             onAdd: () {
-                              context.read<CartProvider>().addToCart(
-                                filteredProducts[index],
-                              );
-                              final scaffoldMessenger = ScaffoldMessenger.of(context);
-                              scaffoldMessenger.removeCurrentSnackBar();
-                              scaffoldMessenger.showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '${filteredProducts[index].name} sepete eklendi!',
-                                  ),
-                                  duration: const Duration(seconds: 2),
-                                  backgroundColor: AppColors.terracotta,
-                                  behavior: SnackBarBehavior.floating,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  action: SnackBarAction(
-                                    label: 'Sepete Git',
-                                    textColor: Colors.white,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const CartScreen(),
-                                        ),
-                                      );
-                                    },
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailScreen(
+                                    product: filteredProducts[index],
                                   ),
                                 ),
                               );
